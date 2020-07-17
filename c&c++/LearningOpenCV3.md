@@ -391,7 +391,7 @@ int main(int argc, char** agrv)
 ## 2. Getting to Know OpenCV Data Types
 
 ### 2.1 The Basics
-在接下来的几章中，我们将介绍OpenCV的所有基本数据类型。用于处理数组（例如图像和大矩阵。此外我们也会学习到很多用于有效处理数据的大量函数。
+在接下来的几章中，我们将介绍OpenCV的所有基本数据类型。用于处理数组（例如图像和大矩阵。此外我们也会学习到很多用于有效处理数据的大量函数。2.2到2.3节简单介绍数据类型，2.4节开始较深入了解各个类型。
 
 ### 2.2 OpenCV Data Types
 OpenCV有许多被设计用来使处理计算机视觉相对容易和直观的数据类型，某些时候开发者可能需要一套相对强大的，可以自定义的操作工具，而OpenCV致力于满足他们，该库试图通过使用基本数据类型的模板来满足这两个需求，通过模板的专业化，使日常操作更加轻松。
@@ -411,5 +411,55 @@ intended for small vectors whose dimensions are known at compile time.
 
 即使`cv::Vec<>`是一个模板类，但是你将更多的使用和见到它的别名(*typedefs*)，如`cv::Vec2i`(二维整型矢量)，`cv::Vec3i`(三维整型矢量),`cv::Vec4d`(四维双浮点(*double-precision float*)型矢量)。
 总的来说`cv::Vec{2,3,4,6}{b,w,s,i,f,d}`的任意组合都是可行的，表示2到6维的6种数据类型。
+
+除了fixed vector classes 外，还有fixed matrix classes，与模板类`cv::Matx<>`相关联。`cv::Matx<>`目的并非用于大数组操作，而是用于解决一些小矩阵问题，在计算机视觉中，有许多场景用到了2x2,3x3的矩阵，少量用到了4x4的矩阵。同样的`cv::Matx<>`也有别名，`cv::Matx{1,2,3,4,5,6}{1,2,3,4,5,6}{f,d}`.
+
+与*fixed vector classes*紧密关联的是*point classes*，用来存储2到三个表示点位置的值。*point classes*与*fixed vector classes*最大的不同在于，它通过named variables来获取成员的值(mypoint.x,mypoint.y,ect),而*fixed vector classes*通过下标获取(myvec[0]),myvec[1],ect).它的别名有：cv::Point2i,cv::Point2f ...
+
+类`cv::Scalar`本质上是一个四维的 point 。但是与point不同的是，Scalar获取数据通过下标，与vector相同，因为Scalar是由Vec<double,4>继承而来的。
+
+`cv::Size和cv::Rect`，与*point classes*一样，它们由自己的模板类继承而来。 `cv::Size` is mainly distinguished by having data members width and height rather than x and y, while `cv::Rect` has all four. The class `cv::Size` is actually an alias for `cv::Size2i`.
+
+
+### 2.4 Basic Types:Getting Down to Details
+本节开始学习各个类型的用法，以及其提供的函数接口。源码在*opencv2/core/core.hpp*
+
+#### 2.4.1 The point classes
+在所有opencv基础类型中，*point  classes*应该是最简单的一个，正如我们前面提到的，它们基于一个模板结构执行，因此它们可以是points of any type(int float double-float ....)。它们有2个主要的模板类，一个是二维一个是三维point。它的优势主要体现在简单易用，开销少，虽然没有许多针对它们的操作，但是它们可以在必要时转化成其它类型的东西，比如*fixed classes*.
+>Table 2.4.1 Function
+
+|Operation|Example|
+|---|---|
+|Default constructors|`cv::Point2i p;` `cv::Point3f p;`|
+|Copy constructors|`cv::Point3f p2(p1);`|
+|Value constructors|`cv:Point2i p(x0,x1);` `cv:Point3d(x0,x1,x2);`|
+|Cast to another classes|`(cv::Vec3f)p;`|
+|Member access|p.x;p.y;(如果有第三维则是p.z)|
+|Dot product(数量积、点乘)|`float x=p1.dot(p2);`|
+|Double-precision dot product |`double x=p1.ddot(p2);`|
+|Cross product(叉乘)|`p1.cross(p2)`//仅限三维|
+|Query if point p is inside rectangle r(查询p是否在r内)|`p.inside(r)`//仅限二维|
+
+#### 2.4.2 The cv::Salar class
+`cv::Salar`：是一个四维的point class，跟其它类一样与一个模板类相关联，但是那些访问它的别名回返回的实例化的模板的成员均为双精度浮点数。
+
+>Table 2.4.2 Function
+
+|Operation|Example|
+|---|---|
+|Default constructors|`cv::Scalar s;`|
+|Copy constructors|`cv::Scalar s2(s1);`|
+|Value constructors|`cv::Scalar s(x0);` `cv::Scalar s(x0,x1,x2,x3);`|
+|Element-wise multiplication[元素智能乘积]("https://www.zhihu.com/question/65866370")|`s1.mul(s2);`|
+|(Quaternion) conjugation(四元素共轭??)|`s.conj();`//return cv::Scalar(s0,-s1,-s2,-s3)???|
+|(Quaternion) real test|`s.isReal();`//return true if s1==s2==s3==0???|
+
+*表格最后2个还不懂是干嘛的，代码测试结果也跟想的不一样*
+*2020/7/17 10:04*
+#### 2.4.3 The Size classes
+
+
+
+
 
 
