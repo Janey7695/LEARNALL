@@ -454,12 +454,106 @@ intended for small vectors whose dimensions are known at compile time.
 |(Quaternion) conjugation(四元素共轭??)|`s.conj();`//return cv::Scalar(s0,-s1,-s2,-s3)???|
 |(Quaternion) real test|`s.isReal();`//return true if s1==s2==s3==0???|
 
+*上面的x0是实数，x1,x2,x3是复数
+
+*与教程不同的是，在另一个视频中，Scalar好像是用来代表颜色的(bgr表达方式)
+
 *表格最后2个还不懂是干嘛的，代码测试结果也跟想的不一样*
+
 *2020/7/17 10:04*
-#### 2.4.3 The Size classes
+#### 2.4.3 The Size classes 
+size classes 与 point classes类似，并且可以cast to and from them。主要的区别是，point 的数据成员是`x`,`y`，而size 的成员是 `width` 和 `height`. size有三个别名，分别是`cv::Size`,`cv::Size2i`,`cv::Size2f`(32位的浮点类型).
+
+>Table 2.4.3 Function
+
+|Operation|Example|
+|---|---|
+|Default constructors|cv::Size sz;cv:: Size2i sz;cv::Szie2f sz;|
+|Copy constructors|cv::Size sz2(sz1);|
+|Value constructors|cv::Size2f sz(w,h);|
+|Member access|sz.width;sz.heigth|
+|Compute area|sz.area();|
+
+但是需要注意的还有：与point classes 不同，size不能cast to fixed vector classes 这意味着size还是有一些作用限制的。而从另一方面来说，point classes和fixed vector 可以完全没问题的cast to size classes。
+
+#### 2.4.4 The cv::Rect class
+这是一个矩形类，包含了一个point class的x,y，用来表示矩形的左上角坐标以及一个size class的width 和 heigth来表示矩形的长宽。并且需要注意的是，这个矩形类并不是从point 或者 size类里继承而来的，因此它也没有继承point 或者 size 的操作API。
+
+>Table 2.4.4.a Function
+
+|Opreation|Example|
+|---|---|
+|Default constructors|cv::Rect r;|
+|Copy constructors|cv::Rect r2(r1);|
+|Value constructors|cv::Rect(x,y,w,h);|
+|construct from origin and size|cv::Rect(p,sz);|
+|construct from two corners(通过2个点来画一个矩形)|cv::Rect(p1,p2);|
+|Member access|r.x;r.y;r.width;r.heigth;|
+|Compute area|r.area();|
+|Extract upper-left corner(获取左上角坐标)|r.tl();|
+|Extract buttom-right corner|r.br();|
+|Determine if point *p* is inside rectangle *r*|r.contains(p);|
+
+除了这些基本操作外，`cv::Rect`还提供了许多重载函数来对计算2个矩形或矩形与其它图像的几何特性
+>Table 2.4.4.b Function
+
+|Opreation|Example|
+|---|---|
+|Intersection of rectangles *r1* and *r2*|cv::Rect r3=r1&r2;r1&=r2;|
+|Minimum area rectangle containing rectangle *r1* and *r2*(同时包含了r1成分与r2成分的最小共有矩形)|cv::Rect r3=r1|r2;r1|=r2;|
+|Translate rectangle *r* by an amount x|cv::Rect rx=r+x;r+=x;|
+|Enlarge a rectangle *r* by an amount given by size *s*|cv::Rect rs=r+s;r+=s;|
+|Compare rectangle *r1* and *r2* for exact equality|bool eq=(r1==r2);|
+|Compare rectangle *r1* and *r2* for inequality|bool eq=(r1!=r2);|
+
+***表格除了第二个 都还不明白用处是什么***
 
 
+#### 2.4.5 The cv::RotatedRect class
+旋转矩形类是c++ OpenCV中为数不多的非模板类，相反，它仅仅是一个容器包含了称为*center*的`cv::Point2f`和称为*size*的`cv::Size2f`以及一个额外的浮点数`float`称为*angle*。angle表示了矩形整体的旋转角度。RotatedRect与Rect最大的区别在于，RotatedRect的逻辑中心点在center，而Rect的逻辑中心点在左上角，并且RotatedRect可以旋转矩形，构成斜的矩形，而Rect只能做出老老实实的矩形。
 
+>Table 2.4.5 Function
 
+|Opreation|Example|
+|---|---|
+|Default constructors|cv::RotatedRect rr();|
+|Copy constructor|cv::RotatedRect rr2(rr1);|
+|Construct from two corners|cv::RotatedRect(p1,p2);|
+|Value constructors;takes a point ,a size,and a angle|cv::RotatedRect rr(p,sz,theta);|
+|Member access|rr.center;rr.size;rr.angle;|
+|Return a list of the corners|rr.points(pts[4]);|
 
+#### 2.4.6 The fixed matrix classes
+fixed matrix之所以叫fixed matrix 是因为这样的矩阵在编译的时候，就已经知道矩阵的大小了，所使用的内存被申请与stack中，因此可以被快速清除，并且针对它的操作也非常快速。
 
+>Table 2.4.6 Function
+
+|Operation|Example|
+|---|---|
+|Default constructor|cv::Matx33f m33f;cv::Matx 43d m43d;|
+|copy constructor|cv::Matx22d m22d(n22d);|
+|Value constructors|cv::Matx21f m(x0,x1);cv::Matx44d m(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15);|
+|Matrix of identical elements|m33f=cv::Matx33f::all(x);|
+|Matrix of zeros(初始化为0矩阵)|m23d=cv::Matx23d::zeros();|
+|Matrix of ones(初始化为单位矩阵)|m16f=cv::Matx16f::ones();|
+|Create a unit matrix|m33f=cv::Matx33f::eye();|
+|Create a matrix that can hold the diagonal of another|m31f=cv::Matx33f::diag();|
+|Create a matrix with uniformly distributed entries|m33f=cv::Matx33f::randu(min,max);|
+|Create a matrix with normally distributed entries(创建具有正态分布条目的矩阵)|m33f=cv::Matx33f::urandu(mean,variance);|
+|Member access|m(i,j),m(i);|
+|Matrix algebra|m1=m0;m1*m2;m1-m0;|
+|Singleton algebra|m\*a;a*m;m/a;|
+|Comparison|m1==m2;m1!=m2;|
+|Dot product|m1.dot(m2);m1.ddot(m2);|
+|Reshape a matrix|m19f=m33f.reshape<9,1>();|
+|Cast operators|m44f=(Matx44f)m44d|
+|Extract 2x2 submatrix at(*i,j*)|m44f.get_minor<2,2>(i,j);|
+|||
+|||
+|||
+|||
+|||
+|||
+|||
+|||
+|||
