@@ -423,6 +423,14 @@ intended for small vectors whose dimensions are known at compile time.
 
 ### 2.4 Basic Types:Getting Down to Details
 本节开始学习各个类型的用法，以及其提供的函数接口。源码在*opencv2/core/core.hpp*
+1. The point classes
+2. The cv::Scalar class
+3. The Size classes
+4. The cv::Rect class
+5. The cv::RotatedRect class
+6. The fixed matrix classes
+7. The fixed vector classes
+8. The complex number classes
 
 #### 2.4.1 The point classes
 在所有opencv基础类型中，*point  classes*应该是最简单的一个，正如我们前面提到的，它们基于一个模板结构执行，因此它们可以是points of any type(int float double-float ....)。它们有2个主要的模板类，一个是二维一个是三维point。它的优势主要体现在简单易用，开销少，虽然没有许多针对它们的操作，但是它们可以在必要时转化成其它类型的东西，比如*fixed classes*.
@@ -548,12 +556,40 @@ fixed matrix之所以叫fixed matrix 是因为这样的矩阵在编译的时候�
 |Reshape a matrix|m19f=m33f.reshape<9,1>();|
 |Cast operators|m44f=(Matx44f)m44d|
 |Extract 2x2 submatrix at(*i,j*)|m44f.get_minor<2,2>(i,j);|
-|||
-|||
-|||
-|||
-|||
-|||
-|||
-|||
-|||
+|Extract row *i*|m14f=m44f.row(i);|
+|Extract column *j*|m41f=m44.col(j);|
+|Extract matrix diagonal(对角线)|m41f=m44f.diag();|
+|Compute transpose(转置？？？)|n44f=m44f.t();|
+|Invert matrix(倒置)|n44f=m44f.inv(method);//默认方式是cv::DECOMP_LU|
+|Solve linear system|m31f=m33f.solve(rhs31f,method);m32f=m33f.solve<2>(rhs32f,method);|
+|Per-element multiplocation|m1.mul(m2);|
+
+#### 2.4.7 The fixed vector classes
+>Table 2.4.7 Function
+
+|Operation|Example|
+|---|---|
+|Default constructor|Vec2s v2s;Vec6f v6f;|
+|Copy constructor|Vec3f u3f(v3f);|
+|Value constructors|Vec2f v2f(x0,x1);Vec6d v6d(x0,x1,x2,x3,x4,x5);|
+|Member access|v4f[i];v3w(j);//使用()和[]都可以|
+|Vector cross-product(向量叉乘？？)|v3f.cross(u3f);|
+
+#### 2.4.8 The complex number classes
+复数类
+
+>Table 2.4.8 Function
+
+|Operation|Example|
+|---|---|
+|Default constructor|cv::Complexf z1;cv::Complexf z2;|
+|Copy constructor|cv::Complexf z2(z1);|
+|Value constructors|cv::Complexd z1(re0);cv::Complexd(re0,im1);|
+|Member access|z1.re;z1.im;|
+|Complex conjugate(共轭)|z2=z1.conj();|
+
+与其它的别名一样，`cv::Complexf`和`cv::Complexd`分别表示single-和double-精度的复数。
+
+*2020/7/20 14:24*
+
+### 2.5 Helper Object
