@@ -593,3 +593,76 @@ fixed matrix之所以叫fixed matrix 是因为这样的矩阵在编译的时候�
 *2020/7/20 14:24*
 
 ### 2.5 Helper Object
+
+除了基础数据类型与大容器(后面的章节会学习)，还有一些对于操作大量算法问题很重要的helper Object。例如通过智能指针对象`cv::Ptr`的学习，我们将认识到c++的垃圾回收系统，这是c++对于OpenCV必不可少的接口，这个系统帮助我们摆脱`allocation`和`deallocation`的烦恼。
+
+#### 2.5.1 The cv::TermCriteria class
+
+Many algorithms require a stopping condition to know when to quit.Generally, stopping criteria take the form of either some finite number of iterations that are allowed (called COUNT or MAX_ITER) or some kind of error parameter that basically says, “if you are this close, you can quit” (called EPS—short for epsilon, everyone’s favorite tiny number). In many cases, it is desirable to have both of these at once so that if the algorithm never gets “close enough,” it will still quit at some point.The cv::TermCriteria objects encapsulate one or both of the stopping criteria so that they can be passed conveniently to an OpenCV algorithm function. They have
+three member variables—type, maxCount, and epsilon—which can be set directly (they are public) or, more often, are just set by the constructor with the form TermCri
+teria( int type, int maxCount, double epsilon ). The variable type is set to
+either cv::TermCriteria::COUNT or TermCriteria::EPS. You can also “or” (i.e., |)
+the two together. The value cv::TermCriteria::COUNT is a synonym for cv::Term
+
+*有待理解*
+
+#### 2.5.2 The cv::Range class
+
+`cv::Range`class被使用来声明一块连续的整数区域，它有2个元素，`start` and `end`.Ranges包括了它们的起始值，但是不包括结束值，即`cv::Range rng(0,4)`中包括了0，1，2，3但是不会包括4.
+
+使用`size()`方法可以得知range里面有多少个元素，就上面而言，`rng.size()`会得到4.另外它还有`empty()`成员函数，用来检测是否有元素在range里面。
+" Finally, cv::Range::all() can be used anywhere a range
+is required to indicate whatever range the object has available."
+
+#### 2.5.3 The cv::Ptr template and Garbage Collection 101
+
+会自动释放空间的智能指针
+
+使用步骤，首先需要为你想“包装”的类对象定义一个指针模板类的实例：
+~~~cpp
+cv::Ptr<Matx33f> p(new cv::Matx33f);
+//或者
+cv::Ptr<Matx33f> p=makePtr<cv::Matx33f>();
+~~~
+可以如同使用正常指针一般使用*p*
+*2020/7/21 10:58*
+#### 2.5.4 The cv::Exception class and exception handling
+
+#### 2.5.5 The cv::DataType<>template
+
+#### 2.5.6 The cv::InputArray and cv::OutputArray classes
+
+### 2.6 Utility Functions
+
+#### 2.6.1 cv::alignPtr()
+#### 2.6.2 cv::alignSize()
+#### 2.6.3 cv::allocate()
+#### 2.6.4 cvCeil()
+#### 2.6.5 cv::cubeRoot()
+#### 2.6.6 cv::CV_Assert()
+#### 2.6.7 CV_Error()
+#### 2.6.8 CV_Error_()
+#### 2.6.9 cv::deallocate()
+#### 2.6.10 cv::error()
+#### 2.6.11 cv::fastAtan2()
+#### 2.6.12 cv::fastFree()
+#### 2.6.13 cv::fastMalloc()
+#### 2.6.14 cvFloor()
+#### 2.6.15 cv::format()
+#### 2.6.16 cv::getCPUTickCount()
+#### 2.6.17 cv::getNumThreads()
+#### 2.6.18 cv::getOptimalDFTSize()
+#### 2.6.19 cv::getThreadNum()
+#### 2.6.20 cv::getTickCount()
+#### 2.6.21 cv::getTickFrequency() 
+#### 2.6.22 cvIsInf()
+#### 2.6.23 cvIsNaN()
+#### 2.6.24 cvRound()
+#### 2.6.25 cv::setNumThreads()
+#### 2.6.26 cv::setUseOptimized()
+#### 2.6.27 cv::useOptimized()
+
+### 2.7 Summary
+
+## 3. Images and Large Arrey Types
+### 3.1 Dynamic and Variable Storage
