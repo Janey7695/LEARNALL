@@ -404,6 +404,7 @@ int main(int argc, char** agrv)
 ——2.4.6 <a href="#2.4.6">The fixed matrix classes</a><br>
 ——2.4.7 <a href="#2.4.7">The fixed vector classes</a><br>
 ——2.4.8 <a href="#2.4.8">The complex number classes</a><br>
+
 2.5 <a href="#2.5">Helper Object</a><br>
 ——2.5.1 <a href="#2.5.1">The cv::TermCriteria class</a><br>
 ——2.5.2 <a href="#2.5.2">The cv::Range class</a><br>
@@ -411,9 +412,33 @@ int main(int argc, char** agrv)
 ——2.5.4 <a href="#2.5.4">The cv::Exception class and exception handling</a><br>
 ——2.5.5 <a href="#2.5.5">The cv::DataType<>template</a><br>
 ——2.5.6 <a href="#2.5.6">The cv::InputArray and cv::OutputArray classes</a><br>
-2.6 <a href="#2.6">Utility Functions</a><br>
-2.7 <a href="#2.7">Summary</a><br>
 
+2.6 <a href="#2.6">Utility Functions</a><br>
+——2.6.1 <a href="#2.6.1">cv::alignPtr</a><br>
+——2.6.2 <a href="#2.6.2">cv::alignSize()</a><br>
+——2.6.3 <a href="#2.6.3">cv::allocate()</a><br>
+——2.6.4 <a href="#2.6.4">cv::deallocate()</a><br>
+——2.6.5 <a href="#2.6.5">cv::fastAtan2()</a><br>
+——2.6.6 <a href="#2.6.6">cvCeil()</a><br>
+——2.6.7 <a href="#2.6.7">cvFloor()</a><br>
+——2.6.8 <a href="#2.6.8">cv::cubeRoot()</a><br>
+——2.6.9 <a href="#2.6.9">cv::CV_Assert()</a><br>
+——2.6.10 <a href="#2.6.10">CV_Error() and CV_Error_()</a><br>
+——2.6.11 <a href="#2.6.11">cv::error()</a><br>
+——2.6.12 <a href="#2.6.12">cv::fastFree() and cv::fastMalloc()</a><br>
+——2.6.13 <a href="#2.6.13">cv::format()</a><br>
+——2.6.14 <a href="#2.6.14">cv::getCPUTickCount()</a><br>
+——2.6.15 <a href="#2.6.15">cv::getNumThreads()</a><br>
+——2.6.16 <a href="#2.6.16">cv::getOptimalDFTSize()</a><br>
+——2.6.17 <a href="#2.6.17">cv::getThreadNum()</a><br>
+——2.6.18 <a href="#2.6.18">cv::getTickCount()</a><br>
+——2.6.19 <a href="#2.6.19">cv::getTickFrequency()</a><br>
+——2.6.20 <a href="#2.6.20">cvIsInf()</a><br>
+——2.6.21 <a href="#2.6.21">cvIsNaN()</a><br>
+——2.6.22 <a href="#2.6.22">cvRound()</a><br>
+——2.6.23 <a href="#2.6.23">cv::setNumThreads()</a><br>
+——2.6.24 <a href="#2.6.24">cv::setUseOptimized()</a><br>
+——2.6.25 <a href="#2.6.25">cv::useOptimized()</a><br>
 
 
 
@@ -654,42 +679,245 @@ cv::Ptr<Matx33f> p=makePtr<cv::Matx33f>();
 可以如同使用正常指针一般使用*p*
 *2020/7/21 10:58*
 #### 2.5.4 The cv::Exception class and exception handling <h id="2.5.4">
+例外情况的中断处理，OpenCV有自己的exceptions去处理错误，被定义为`cv::Exception`。事实上，这个exception type是从STL的std::exception中派生得到的，并且除了命名空间的不同，也没有其它很大的区别。
+
+类型`cv::Exception`有成员`code`,`err`,`func`,`file`和`line`，分别代表错误代码编号，对错误的简要说明，出错函数名，出错的文件，出错的具体行数。
+
+并且这里也有一些内置宏可以让你自己生成exception。`CV_Error(errorcode,description)` 会生成和抛出异常通过一些提前固定的文本描述，而`CV_Error_(errorcode,printf_fmt_str,[printf-args])`可以自定义抛出的描述的内容。`CV_Assert(condition)`就跟`Assert()`的用法一样！
 
 #### 2.5.5 The cv::DataType<>template  <h id="2.5.5">
 
+真看不懂 
+
 #### 2.5.6 The cv::InputArray and cv::OutputArray classes <h id="2.5.6">
 
-### 2.6 Utility Functions <h id="2.6">
+真看不懂 
 
-#### 2.6.1 cv::alignPtr()
-#### 2.6.2 cv::alignSize()
-#### 2.6.3 cv::allocate()
-#### 2.6.4 cvCeil()
-#### 2.6.5 cv::cubeRoot()
-#### 2.6.6 cv::CV_Assert()
-#### 2.6.7 CV_Error()
-#### 2.6.8 CV_Error_()
-#### 2.6.9 cv::deallocate()
-#### 2.6.10 cv::error()
-#### 2.6.11 cv::fastAtan2()
-#### 2.6.12 cv::fastFree()
-#### 2.6.13 cv::fastMalloc()
-#### 2.6.14 cvFloor()
-#### 2.6.15 cv::format()
-#### 2.6.16 cv::getCPUTickCount()
-#### 2.6.17 cv::getNumThreads()
-#### 2.6.18 cv::getOptimalDFTSize()
-#### 2.6.19 cv::getThreadNum()
-#### 2.6.20 cv::getTickCount()
-#### 2.6.21 cv::getTickFrequency() 
-#### 2.6.22 cvIsInf()
-#### 2.6.23 cvIsNaN()
-#### 2.6.24 cvRound()
-#### 2.6.25 cv::setNumThreads()
-#### 2.6.26 cv::setUseOptimized()
-#### 2.6.27 cv::useOptimized()
+### 2.6 Utility Functions效用函数 <h id="2.6">
+本章之前的内容提供一些原始的数据类型，但除了这些OpenCV还提供了另外一些实用的便于解决计算机视觉上的数学算法问题的函数，这些函数AKA 效用函数(utility function)。 这些函数包括了数学操作，测试，错误生成，内存和线程优化等。加下来将讲解这些函数。
+#### 2.6.1 cv::alignPtr() <h id="2.6.1">
+将指针对齐到指定的字节数？？？
 
-### 2.7 Summary <h id="2.7">
+#### 2.6.2 cv::alignSize() <h id="2.6.2">
+???
 
-## 3. Images and Large Arrey Types
-### 3.1 Dynamic and Variable Storage
+#### 2.6.3 cv::allocate()  <h id="2.6.3">
+~~~cpp
+template<T> T* cv::allocate(
+	size_t sz
+	);
+~~~
+与`new`风格的申请数组空间一样，它会allocate一个有sz个T类型成员的c风格的数组，并返回数组第一个对象的指针。
+
+#### 2.6.4 cv::deallocate() <h id="2.6.4">
+~~~cpp
+template<T> void cv::deallocate(
+	T* ptr, // Pointer to buffer to free
+	size_t sz // size of buffer, multiples of sizeof(T)
+);
+~~~
+与`delete`类似，它会释放一个有sz个T类型成员的c风格的数组。`cv::deallocate()`被用来释放那些`cv::allocate()`申请的空间(成对存在)。
+
+#### 2.6.5 cv::fastAtan2() <h id="2.6.5">
+~~~cpp
+float cv::fastAtan2( // Return value is 32-bit float
+	float y, // y input value (32-bit float)
+	float x // x input value (32-bit float)
+)
+~~~
+返回(x,y)的反正切值
+
+#### 2.6.6 cvCeil() <h id="2.6.6">
+~~~cpp
+int cvCeil( // Return the smallest int >= x
+float x // input value (32-bit float)
+);
+~~~
+返回一个>=x的最小整数
+
+#### 2.6.7 cvFloor() <h id="2.6.7">
+~~~cpp
+int cvFloor( // Return the largest int <= x
+float x // input value (32-bit float)
+);
+~~~
+
+返回一个<=x的整数
+
+#### 2.6.8 cv::cubeRoot() <h id="2.6.8">
+~~~cpp
+float cv::cubeRoot( // Return value is 32-bit float
+float x // input value (32-bit float)
+)
+~~~
+计算并返回x的立方根
+
+#### 2.6.9 cv::CV_Assert() <h id="2.6.9">
+与`Assert()`用法一样
+
+#### 2.6.10 CV_Error() and CV_Error_() <h id="2.6.10">
+~~~cpp
+// example
+CV_Error( ecode, estring )
+CV_Error_( ecode, fmt, ... )
+~~~
+The macro CV_Error() allows you to pass in an error code ecode and a fixed C-style
+character string estring, which it then packages up into a cv::Exception that it then
+passes to cv::error() to be handled. The variant macro CV_Error_() is used if you
+need to construct the message string on the fly. CV_Error_() accepts the same ecode
+as CV_Error(), but then expects a sprintf()-style format string followed by a vari‐
+able number of arguments, as would be expected by sprintf()
+
+#### 2.6.11 cv::error() <h id="2.6.11">
+???
+#### 2.6.12 cv::fastFree() and cv::fastMalloc() <h id="2.6.12">
+~~~cpp 
+void* cv::fastMalloc( // Pointer to allocated buffer
+size_t size // Size of buffer to allocate
+);
+
+void cv::fastFree(
+void* ptr // Pointer to buffer to be freed
+);
+~~~
+cv :: FastMalloc（）的工作方式与您熟悉的malloc（）相同，除了更快，并且可以为您实现缓冲区大小对齐。 这意味着如果缓冲区传递的大小超过16个字节，返回的缓冲区将与16个字节对齐边界.
+
+cv::fastFree()用来释放cv::fastFree申请的空间
+
+
+#### 2.6.13 cv::format() <h id="2.6.13">
+~~~cpp
+string cv::format( // Return STL-string
+const char* fmt, // formatting string, as sprintf()
+... // vargs, as sprintf()
+);
+~~~
+此函数与标准库中的sprintf（）基本相同，但是并不是要求调用者提供字符缓冲区，而是构造一个STL字符串对象并返回该对象。 这对于格式化错误消息特别方便。Exception（）构造函数（期望在其参数中包含STL字符串）
+
+#### 2.6.14 cv::getCPUTickCount() <h id="2.6.14">
+~~~cpp
+int64 cv::getCPUTickCount( void ); // long int CPU for tick count
+~~~
+此功能报告具有以下特性的那些架构上的CPU滴答声数量
+构造（包括但不限于x86架构）。 重要的是要知道，
+但是，该函数的返回值可能很难解释
+许多架构。 特别是因为在多核系统上可以放置线程
+在一个核心上睡觉，在另一个核心上醒来，结果之间的差异
+对cv :: getCPUTickCount（）的两个后续调用可能会误导或完全误导
+无意义的。 因此，除非您确定自己知道自己在做什么，否则最好使用cv :: getTickCount（）进行时序测量。13此功能最适合
+初始化随机数生成器之类的任务。
+#### 2.6.15 cv::getNumThreads() <h id="2.6.15">
+~~~cpp
+int cv::getNumThreads( void ); // total threads allocated to OpenCV
+~~~
+返回OpenCV使用的线程数量
+
+
+#### 2.6.16 cv::getOptimalDFTSize() <h id="2.6.16">
+？？？
+#### 2.6.17 cv::getThreadNum() <h id="2.6.17">
+~~~cpp
+int cv::getThreadNum( void ); // int, id of this particular thread
+~~~
+If your OpenCV library was compiled with OpenMP support, it will return the index (starting from zero) of the currently executing thread.
+
+#### 2.6.18 cv::getTickCount() <h id="2.6.18">
+~~~cpp
+int64 cv::getTickCount( void ); // long int CPU for tick count
+~~~
+
+#### 2.6.19 cv::getTickFrequency() <h id="2.6.19">
+~~~cpp
+double cv::getTickFrequency( void ); // Tick frequency in seconds as 64-bit
+~~~
+
+#### 2.6.20 cvIsInf() <h id="2.6.20">
+~~~cpp
+int cvIsInf( double x ); // return 1 if x is IEEE754 "infinity"
+~~~
+返回1如果x是IEEE754 standard中的正负无穷大，否则返回0
+
+#### 2.6.21 cvIsNaN() <h id="2.6.21">
+~~~cpp
+int cvIsNan( double x ); // return 1 if x is IEEE754 "Not a number"
+~~~
+返回1如果x不是数字，否则返回0.
+
+#### 2.6.22 cvRound() <h id="2.6.22">
+~~~cpp
+int cvRound( double x ); // Return integer nearest to 'x'
+~~~
+返回一个离x最近的整数
+
+#### 2.6.23 cv::setNumThreads() <h id="2.6.23">
+~~~cpp
+void cv::setNumThreads( int nthreads ); // Set number of threads OpenCV can use
+~~~
+
+#### 2.6.24 cv::setUseOptimized() <h id="2.6.24">
+~~~cpp
+void cv::setUseOptimized( bool on_off ); // If false, turn off optimized routines
+~~~
+???
+#### 2.6.25 cv::useOptimized() <h id="2.6.25">
+???
+
+## 3. Images and Large Arrey Types 
+### Dynamic and Variable Storage 动态可变存储
+接下来将学习 *large array types* ,其中最主要的就是`cv::Mat`，OpenCV中大部分的函数都是`cv::Mat`的成员函数。`cv::Mat` 类被用来代表任意维度的密集数组(*dense array*)。相反，`cv::SparseMat`代表了稀疏数组。
+
+>导航
+
+3.1 <a href="#3.1">The cv::Mat Class:N-Dimensional Dense Arrays</a><br>
+3.2 <a href="#3.2">Creating an Array</a><br>
+
+#### 3.1 The cv::Mat Class:N-Dimensional Dense Arrays <h id="3.1">
+??? 
+#### 3.2 Creating an Array <h id="3.2">
+可以通过极其简单的声明变量的方法来创建一个Mat数组：
+~~~cpp
+cv::Mat m;
+~~~
+这时候得到`m`是没有尺寸大小和数据类型的，可以通过Mat的一个成员函数`create()`来为其申请内存空间大小以及存放的数据类型。
+
+~~~cpp
+cv::Mat m;
+m.create(3,10,CV_32FC3);
+m.setTo(cv::Scalar(1.0f,0.0f,1.0f));
+~~~
+上面的代码将`m`变成了一个*3rows 10 columns*的*三通道 32位float型*的数组。并且通过`setTo()`将其第一通道设置为1.0，第二通道设置为0.0，第三设置为1.0 。
+
+>关于creat()
+第一个参数表示行，第二个参数表示列，(当然这表示一个二维的平面，以后也可以增加参数来表示一个三维的立体)。第三个参数表示这个数组容纳什么类型的数据，包括数据的数据类型，通道数，这些都通过头文件的宏定义帮大家订好了。可以用以下的形式`CV_{8U,16S,16U,32S,32F,64F}C{1,2,3}`前面的表示是几位的什么类型的数据，比如32F表示32位的float，后面的表示通道数，比如3表示三通道。
+
+另外，也可以将setTo写到create里面来一次完成，上面的代码等价为：
+~~~cpp
+cv::Mat m=(3,10,CV_32FC3,cv::Scalar(1.0f,0.0f,1.0f));
+~~~
+
+其实`cv::Mat`有多种声明方式，虽然我们大多数时候只会用到其中几种。如下表：
+>Table 3.2.1
+
+|Constructor|Description|
+|---|---|
+|cv::Mat;|Default constructor|
+|cv::Mat( int rows, int cols, int type );|Two-dimensional arrays by type|
+|cv::Mat(int rows, int cols, int type,const Scalar& s);|Two-dimensional arrays by type with initialization value|
+|cv::Mat(int rows, int cols, int type,void* data, size_t step=AUTO_STEP);|Two-dimensional arrays by type with preexisting data|
+|cv::Mat( cv::Size sz, int type );|Two-dimensional arrays by type (size in sz)|
+|cv::Mat(cv::Size sz,int type, const Scalar& s);|Two-dimensional arrays by type with initialization value (size in sz)|
+|cv::Mat(cv::Size sz, int type,void* data, size_t step=AUTO_STEP);|Two-dimensional arrays by type with preexisting data (size in sz)|
+|cv::Mat(int ndims, const int* sizes,int type);|Multidimensional arrays by type|
+|cv::Mat(int ndims, const int* sizes,int type, const Scalar& s);|Multidimensional arrays by type with initialization value|
+|cv::Mat(int ndims, const int* sizes,int type, void* data,size_t step=AUTO_STEP);|Multidimensional arrays by type with preexisting data|
+
+此外，这里还有一些`Copy`函数，可以复制一个`Mat` 到 另一个`Mat`
+
+*2020/7/23 16:22*
+
+>Table 3.2.1
+
+
+
+
+
