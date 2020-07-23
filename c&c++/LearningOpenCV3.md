@@ -1,4 +1,5 @@
-# Learning OpenCV3
+
+# Learning OpenCV3 <div id="1">
 
 ## 1.Introduction to OpenCV
 ### 1.1 第一个程序-展示一张图片
@@ -389,11 +390,37 @@ int main(int argc, char** agrv)
 ---
 
 ## 2. Getting to Know OpenCV Data Types
+>导航
 
-### 2.1 The Basics
+2.1 <a href="#2.1">The Basics</a><br>
+2.2 <a href="#2.2">OpenCV Data Types</a><br>
+2.3 <a href="#2.3">Overview of the Basic Types</a><br>
+2.4 <a href="#2.4">Basic Types:Getting Down to Details</a><br>
+——2.4.1 <a href="#2.4.1">The point classes</a><br>
+——2.4.2 <a href="#2.4.2">The cv::Salar class</a><br>
+——2.4.3 <a href="#2.4.3">The Size classes</a><br>
+——2.4.4 <a href="#2.4.4">The cv::Rect class</a><br>
+——2.4.5 <a href="#2.4.5">The cv::RotatedRect class</a><br>
+——2.4.6 <a href="#2.4.6">The fixed matrix classes</a><br>
+——2.4.7 <a href="#2.4.7">The fixed vector classes</a><br>
+——2.4.8 <a href="#2.4.8">The complex number classes</a><br>
+2.5 <a href="#2.5">Helper Object</a><br>
+——2.5.1 <a href="#2.5.1">The cv::TermCriteria class</a><br>
+——2.5.2 <a href="#2.5.2">The cv::Range class</a><br>
+——2.5.3 <a href="#2.5.3">The cv::Ptr template and Garbage Collection 101</a><br>
+——2.5.4 <a href="#2.5.4">The cv::Exception class and exception handling</a><br>
+——2.5.5 <a href="#2.5.5">The cv::DataType<>template</a><br>
+——2.5.6 <a href="#2.5.6">The cv::InputArray and cv::OutputArray classes</a><br>
+2.6 <a href="#2.6">Utility Functions</a><br>
+2.7 <a href="#2.7">Summary</a><br>
+
+
+
+
+### 2.1 The Basics <h id="2.1">
 在接下来的几章中，我们将介绍OpenCV的所有基本数据类型。用于处理数组（例如图像和大矩阵。此外我们也会学习到很多用于有效处理数据的大量函数。2.2到2.3节简单介绍数据类型，2.4节开始较深入了解各个类型。
 
-### 2.2 OpenCV Data Types
+### 2.2 OpenCV Data Types <h id="2.2">
 OpenCV有许多被设计用来使处理计算机视觉相对容易和直观的数据类型，某些时候开发者可能需要一套相对强大的，可以自定义的操作工具，而OpenCV致力于满足他们，该库试图通过使用基本数据类型的模板来满足这两个需求，通过模板的专业化，使日常操作更加轻松。
 
 OpenCV的数据类型大致可以分成三类：
@@ -403,7 +430,7 @@ OpenCV的数据类型大致可以分成三类：
 
 除了上面的3类外，还需要注意的是OpenCV大量的使用了STL库，因此了解STL的话对于学习OpenCV有帮助。
 
-### 2.3 Overview of the Basic Types
+### 2.3 Overview of the Basic Types <h id="2.3">
 
 模板类`cv::Vec<>`，也被称为固定容器类(*fixed vector classes*). Why
 not just use STL classes? The key difference is that the fixed vector classes are
@@ -421,7 +448,7 @@ intended for small vectors whose dimensions are known at compile time.
 `cv::Size和cv::Rect`，与*point classes*一样，它们由自己的模板类继承而来。 `cv::Size` is mainly distinguished by having data members width and height rather than x and y, while `cv::Rect` has all four. The class `cv::Size` is actually an alias for `cv::Size2i`.
 
 
-### 2.4 Basic Types:Getting Down to Details
+### 2.4 Basic Types:Getting Down to Details <h id="2.4">
 本节开始学习各个类型的用法，以及其提供的函数接口。源码在*opencv2/core/core.hpp*
 1. The point classes
 2. The cv::Scalar class
@@ -432,7 +459,7 @@ intended for small vectors whose dimensions are known at compile time.
 7. The fixed vector classes
 8. The complex number classes
 
-#### 2.4.1 The point classes
+#### 2.4.1 The point classes <h id="2.4.1">
 在所有opencv基础类型中，*point  classes*应该是最简单的一个，正如我们前面提到的，它们基于一个模板结构执行，因此它们可以是points of any type(int float double-float ....)。它们有2个主要的模板类，一个是二维一个是三维point。它的优势主要体现在简单易用，开销少，虽然没有许多针对它们的操作，但是它们可以在必要时转化成其它类型的东西，比如*fixed classes*.
 >Table 2.4.1 Function
 
@@ -448,7 +475,7 @@ intended for small vectors whose dimensions are known at compile time.
 |Cross product(叉乘)|`p1.cross(p2)`//仅限三维|
 |Query if point p is inside rectangle r(查询p是否在r内)|`p.inside(r)`//仅限二维|
 
-#### 2.4.2 The cv::Salar class
+#### 2.4.2 The cv::Salar class <h id="2.4.2">
 `cv::Salar`：是一个四维的point class，跟其它类一样与一个模板类相关联，但是那些访问它的别名回返回的实例化的模板的成员均为双精度浮点数。
 
 >Table 2.4.2 Function
@@ -469,7 +496,7 @@ intended for small vectors whose dimensions are known at compile time.
 *表格最后2个还不懂是干嘛的，代码测试结果也跟想的不一样*
 
 *2020/7/17 10:04*
-#### 2.4.3 The Size classes 
+#### 2.4.3 The Size classes <h id="2.4.3">
 size classes 与 point classes类似，并且可以cast to and from them。主要的区别是，point 的数据成员是`x`,`y`，而size 的成员是 `width` 和 `height`. size有三个别名，分别是`cv::Size`,`cv::Size2i`,`cv::Size2f`(32位的浮点类型).
 
 >Table 2.4.3 Function
@@ -484,7 +511,7 @@ size classes 与 point classes类似，并且可以cast to and from them。主�
 
 但是需要注意的还有：与point classes 不同，size不能cast to fixed vector classes 这意味着size还是有一些作用限制的。而从另一方面来说，point classes和fixed vector 可以完全没问题的cast to size classes。
 
-#### 2.4.4 The cv::Rect class
+#### 2.4.4 The cv::Rect class <h id="2.4.4">
 这是一个矩形类，包含了一个point class的x,y，用来表示矩形的左上角坐标以及一个size class的width 和 heigth来表示矩形的长宽。并且需要注意的是，这个矩形类并不是从point 或者 size类里继承而来的，因此它也没有继承point 或者 size 的操作API。
 
 >Table 2.4.4.a Function
@@ -517,7 +544,7 @@ size classes 与 point classes类似，并且可以cast to and from them。主�
 ***表格除了第二个 都还不明白用处是什么***
 
 
-#### 2.4.5 The cv::RotatedRect class
+#### 2.4.5 The cv::RotatedRect class <h id="2.4.5">
 旋转矩形类是c++ OpenCV中为数不多的非模板类，相反，它仅仅是一个容器包含了称为*center*的`cv::Point2f`和称为*size*的`cv::Size2f`以及一个额外的浮点数`float`称为*angle*。angle表示了矩形整体的旋转角度。RotatedRect与Rect最大的区别在于，RotatedRect的逻辑中心点在center，而Rect的逻辑中心点在左上角，并且RotatedRect可以旋转矩形，构成斜的矩形，而Rect只能做出老老实实的矩形。
 
 >Table 2.4.5 Function
@@ -531,7 +558,7 @@ size classes 与 point classes类似，并且可以cast to and from them。主�
 |Member access|rr.center;rr.size;rr.angle;|
 |Return a list of the corners|rr.points(pts[4]);|
 
-#### 2.4.6 The fixed matrix classes
+#### 2.4.6 The fixed matrix classes <h id="2.4.6">
 fixed matrix之所以叫fixed matrix 是因为这样的矩阵在编译的时候，就已经知道矩阵的大小了，所使用的内存被申请与stack中，因此可以被快速清除，并且针对它的操作也非常快速。
 
 >Table 2.4.6 Function
@@ -564,7 +591,7 @@ fixed matrix之所以叫fixed matrix 是因为这样的矩阵在编译的时候�
 |Solve linear system|m31f=m33f.solve(rhs31f,method);m32f=m33f.solve<2>(rhs32f,method);|
 |Per-element multiplocation|m1.mul(m2);|
 
-#### 2.4.7 The fixed vector classes
+#### 2.4.7 The fixed vector classes <h id="2.4.7">
 >Table 2.4.7 Function
 
 |Operation|Example|
@@ -575,7 +602,7 @@ fixed matrix之所以叫fixed matrix 是因为这样的矩阵在编译的时候�
 |Member access|v4f[i];v3w(j);//使用()和[]都可以|
 |Vector cross-product(向量叉乘？？)|v3f.cross(u3f);|
 
-#### 2.4.8 The complex number classes
+#### 2.4.8 The complex number classes <h id="2.4.8">
 复数类
 
 >Table 2.4.8 Function
@@ -592,11 +619,11 @@ fixed matrix之所以叫fixed matrix 是因为这样的矩阵在编译的时候�
 
 *2020/7/20 14:24*
 
-### 2.5 Helper Object
+### 2.5 Helper Object <h id="2.5">
 
 除了基础数据类型与大容器(后面的章节会学习)，还有一些对于操作大量算法问题很重要的helper Object。例如通过智能指针对象`cv::Ptr`的学习，我们将认识到c++的垃圾回收系统，这是c++对于OpenCV必不可少的接口，这个系统帮助我们摆脱`allocation`和`deallocation`的烦恼。
 
-#### 2.5.1 The cv::TermCriteria class
+#### 2.5.1 The cv::TermCriteria class <h id="2.5.1">
 
 Many algorithms require a stopping condition to know when to quit.Generally, stopping criteria take the form of either some finite number of iterations that are allowed (called COUNT or MAX_ITER) or some kind of error parameter that basically says, “if you are this close, you can quit” (called EPS—short for epsilon, everyone’s favorite tiny number). In many cases, it is desirable to have both of these at once so that if the algorithm never gets “close enough,” it will still quit at some point.The cv::TermCriteria objects encapsulate one or both of the stopping criteria so that they can be passed conveniently to an OpenCV algorithm function. They have
 three member variables—type, maxCount, and epsilon—which can be set directly (they are public) or, more often, are just set by the constructor with the form TermCri
@@ -606,7 +633,7 @@ the two together. The value cv::TermCriteria::COUNT is a synonym for cv::Term
 
 *有待理解*
 
-#### 2.5.2 The cv::Range class
+#### 2.5.2 The cv::Range class <h id="2.5.2">
 
 `cv::Range`class被使用来声明一块连续的整数区域，它有2个元素，`start` and `end`.Ranges包括了它们的起始值，但是不包括结束值，即`cv::Range rng(0,4)`中包括了0，1，2，3但是不会包括4.
 
@@ -614,7 +641,7 @@ the two together. The value cv::TermCriteria::COUNT is a synonym for cv::Term
 " Finally, cv::Range::all() can be used anywhere a range
 is required to indicate whatever range the object has available."
 
-#### 2.5.3 The cv::Ptr template and Garbage Collection 101
+#### 2.5.3 The cv::Ptr template and Garbage Collection 101 <h id="2.5.3">
 
 会自动释放空间的智能指针
 
@@ -626,13 +653,13 @@ cv::Ptr<Matx33f> p=makePtr<cv::Matx33f>();
 ~~~
 可以如同使用正常指针一般使用*p*
 *2020/7/21 10:58*
-#### 2.5.4 The cv::Exception class and exception handling
+#### 2.5.4 The cv::Exception class and exception handling <h id="2.5.4">
 
-#### 2.5.5 The cv::DataType<>template
+#### 2.5.5 The cv::DataType<>template  <h id="2.5.5">
 
-#### 2.5.6 The cv::InputArray and cv::OutputArray classes
+#### 2.5.6 The cv::InputArray and cv::OutputArray classes <h id="2.5.6">
 
-### 2.6 Utility Functions
+### 2.6 Utility Functions <h id="2.6">
 
 #### 2.6.1 cv::alignPtr()
 #### 2.6.2 cv::alignSize()
@@ -662,7 +689,7 @@ cv::Ptr<Matx33f> p=makePtr<cv::Matx33f>();
 #### 2.6.26 cv::setUseOptimized()
 #### 2.6.27 cv::useOptimized()
 
-### 2.7 Summary
+### 2.7 Summary <h id="2.7">
 
 ## 3. Images and Large Arrey Types
 ### 3.1 Dynamic and Variable Storage
