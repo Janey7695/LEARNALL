@@ -870,6 +870,8 @@ void cv::setUseOptimized( bool on_off ); // If false, turn off optimized routine
 
 3.1 <a href="#3.1">The cv::Mat Class:N-Dimensional Dense Arrays</a><br>
 3.2 <a href="#3.2">Creating an Array</a><br>
+3.3 <a href="#3.3">Accessing Array Element Individually</a><br>
+3.4 <a href="#3.4">The N-ary Array Iterator:NAryMatlterator</a><br>
 
 #### 3.1 The cv::Mat Class:N-Dimensional Dense Arrays <h id="3.1">
 ??? 
@@ -915,9 +917,46 @@ cv::Mat m=(3,10,CV_32FC3,cv::Scalar(1.0f,0.0f,1.0f));
 
 *2020/7/23 16:22*
 
->Table 3.2.1
+>Table 3.2.2
 
+|Constructor|Description|
+|---|---|
+|cv::Mat( const Mat& mat );|Copy constructor|
+|cv::Mat(const Mat& mat,const cv::Range& rows,const cv::Range&cols)|Copy constructor that copies only a subset of rows and columns|
+|cv::Mat(const Mat& mat,const cv::Rect& roi);|Copy constructor that copies only a subset of rows and columns specified by a region of interes|
+|cv::Mat(const Mat& mat,const cv::Range* ranges);|Generalized region of interest copy constructor that uses an array of ranges to select from an n-dimensional array|
+|cv::Mat( const cv::MatExpr& expr );|Copy constructor that initializes m with the result of an algebraic expression of other matrices|
 
+还有三个创建特殊矩阵的函数 
+>Table 3.2.3
 
+|Function|Description|
+|---|---|
+|cv::Mat::zeros( rows, cols, type );|0矩阵|
+|cv::Mat::ones( rows, cols, type );|全是1矩阵|
+|cv::Mat::eye( rows, cols, type );|单位矩阵|
+
+#### 3.3 Accessing Array Element Individually <h id="3.3">
+
+我们有许多方法去访问一个矩阵内的元素，而在最近的OpenCV版本中，最常用的2种方法是寻址或者迭代。
+
+最基本的寻址方式是使用模板类成员函数`at<>()`。你需要提供要访问的数据的类型以及它的矩阵内坐标，下面是一个简单的例子：
+~~~cpp
+cv::Mat m=cv::Mat::eye(10,10,CV_32FC1);
+
+printf("Element(3,3) is %f/n",m.at<float>(3,3));
+
+~~~
+
+如果是一个多通道的大数组，则需要用下面的方法：
+~~~cpp
+cv::Mat m=cv::Mat::eye(10,10,CV_32FC2);
+printf("Element(3,3) is (%f,%f)/n",m.at<cv::Vec2f>(3,3)[0],m.at<cv::Vec2f>(3,3)[1]);
+~~~
+记住，当需要去访问一个多通道数组时，最好使用cv::Vec<>对象。
+
+*2020/7/24 11:06*
+
+#### 3.4 The N-ary Array Iterator:NAryMatlterator <h id="3.4">
 
 
